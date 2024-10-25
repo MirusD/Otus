@@ -12,7 +12,7 @@ namespace Library
             var UI = new UIConsole();
             var reader = new Reader("Михаил", books);
 
-            Task.Run(async () => ReadBooks());
+            Task.Run(ReadBooks);
 
             UI.OnPressKey += (key) =>
             {
