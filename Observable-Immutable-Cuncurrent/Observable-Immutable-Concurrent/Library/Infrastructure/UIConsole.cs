@@ -17,7 +17,7 @@
             WaitingKeyToPress();
         }
 
-        public void WaitingKeyToPress()
+        private void WaitingKeyToPress()
         {
             var key = Console.ReadKey(true);
             OnPressKey?.Invoke(key);

@@ -6,11 +6,11 @@ namespace Library
 {
     internal class Program
     {
-        private static ConcurrentDictionary<string, int> books = new ConcurrentDictionary<string, int>();
+        private static ConcurrentDictionary<string, int> _books = new ConcurrentDictionary<string, int>();
         static async Task Main(string[] args)
         {
             var UI = new UIConsole();
-            var reader = new Reader("Михаил", books);
+            var reader = new Reader("Михаил", _books);
 
             Task.Run(ReadBooks);
 
@@ -55,15 +55,15 @@ namespace Library
             {
                 await Task.Delay(1000);
 
-                foreach (var book in books)
+                foreach (var book in _books)
                 {
                     if (book.Value < 100)
                     {
-                        books.AddOrUpdate(book.Key, 0, (k, oldValue) => oldValue + 1);
+                        _books.AddOrUpdate(book.Key, 0, (k, oldValue) => oldValue + 1);
                     }
                     else
                     {
-                        books.TryRemove(book.Key, out int removeValue);
+                        _books.TryRemove(book.Key, out int removeValue);
                     }
                 }
             }

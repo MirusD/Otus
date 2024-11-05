@@ -9,16 +9,12 @@ namespace JackHouse
 {
     internal class Part1
     {
-        private ImmutableList<string> poem;
+        private ImmutableList<string> _poem;
         public ImmutableList<string> Poem {
-            get => poem;
+            get => _poem;
             set
             {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
-                poem = value;
+                _poem = value ?? throw new ArgumentNullException(nameof(value));
             }
         }
         public void AddPart(ImmutableList<string> list)

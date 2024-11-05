@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Specialized;
 
 namespace Observable_Immutable_Concurrent
 {
@@ -12,7 +7,7 @@ namespace Observable_Immutable_Concurrent
     /// </summary>
     internal class Customer
     {
-        public string Name { get; set; }
+        public string Name { get; }
         public Customer(string name) 
         {
             Name = name;

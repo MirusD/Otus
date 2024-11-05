@@ -4,23 +4,23 @@ namespace Librarian.Domain
 {
     internal class Reader
     {
-        private ConcurrentDictionary<string, int> Books;
-        public string Name;
+        private ConcurrentDictionary<string, int> _books;
+        public string Name { get; }
 
         public Reader(string name, ConcurrentDictionary<string, int> books)
         {
-            Books = books;
+            _books = books;
             Name = name;
         }
 
         public void Add(string bookName)
         {
-            bool isAdded = Books.TryAdd(bookName, 0);
+            bool isAdded = _books.TryAdd(bookName, 0);
         }
 
         public ConcurrentDictionary<string, int> GetListBooks()
         {
-            return Books;
+            return _books;
         }
     }
 }

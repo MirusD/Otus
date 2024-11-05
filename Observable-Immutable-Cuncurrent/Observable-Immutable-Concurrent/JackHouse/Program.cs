@@ -28,15 +28,15 @@ namespace JackHouse
             part8.AddPart(part7.Poem);
             part9.AddPart(part8.Poem);
 
-            Console.WriteLine(part1.Poem.Count);
-            Console.WriteLine(part2.Poem.Count);
-            Console.WriteLine(part3.Poem.Count);
-            Console.WriteLine(part4.Poem.Count);
-            Console.WriteLine(part5.Poem.Count);
-            Console.WriteLine(part6.Poem.Count);
-            Console.WriteLine(part7.Poem.Count);
-            Console.WriteLine(part8.Poem.Count);
-            Console.WriteLine(part9.Poem.Count);
+            Console.WriteLine(String.Join(" ", part1.Poem));
+            Console.WriteLine(String.Join(" ", part2.Poem));
+            Console.WriteLine(String.Join(" ", part3.Poem));
+            Console.WriteLine(String.Join(" ", part4.Poem));
+            Console.WriteLine(String.Join(" ", part5.Poem));
+            Console.WriteLine(String.Join(" ", part6.Poem));
+            Console.WriteLine(String.Join(" ", part7.Poem));
+            Console.WriteLine(String.Join(" ", part8.Poem));
+            Console.WriteLine(String.Join(" ", part9.Poem));
         }
     }
 }
