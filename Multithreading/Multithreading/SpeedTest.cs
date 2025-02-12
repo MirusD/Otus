@@ -71,7 +71,7 @@ namespace Multithreading
                 {
                     if (a == 0)
                     {
-                        Console.Write($"{("Цыклы ->"),-9}");
+                        Console.Write($"{("Циклы ->"),-9}");
                     }
                     else
                     {
