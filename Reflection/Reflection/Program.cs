@@ -30,6 +30,12 @@ namespace Reflection
             var (json, jsonSerializeTime) = BenchmarkTime.Measure(() => JsonSerialize(f));
             Console.WriteLine($"Результат JSON сериализации: {json}");
             Console.WriteLine($"Время JSON сериализацию: {jsonSerializeTime.ElapsedMilliseconds} мс.");
+
+            Console.WriteLine(new string('-', 50));
+
+            var (fObj2, jsonDeserializeTime) = BenchmarkTime.Measure(() => JsonDeserialize<F>(json));
+            Console.WriteLine($"Результат JSON десериализациии: {fObj2.GetType()}");
+            Console.WriteLine($"Время JSON десериализации: {jsonDeserializeTime.ElapsedMilliseconds} мс.");
         }
 
         static string CsvSerialize<T>(T f) where T : new()
@@ -53,6 +59,11 @@ namespace Reflection
         static string JsonSerialize<T>(T f)
         {
             return JsonSerializer.Serialize(f);
+        }
+
+        static T? JsonDeserialize<T>(string json)
+        {
+            return JsonSerializer.Deserialize<T>(json);
         }
     }
 }
