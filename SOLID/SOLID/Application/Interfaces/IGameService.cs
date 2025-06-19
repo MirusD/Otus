@@ -6,12 +6,12 @@ namespace SOLID.Application.Interfaces
     {
         void StartGame();
 
-        GuessResult MakeGuess(int guess);
+        void MakeGuess(int guess);
 
         void ResetGame();
 
-        int GetAttempt();
+        void Subscribe(IGameObserver observer);
 
-        int GetTargetNumber();
+        void Unsubscribe(IGameObserver observer);
     }
 }

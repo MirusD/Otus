@@ -1,23 +1,39 @@
-﻿using SOLID.Domain.Enums;
+﻿using SOLID.Application.Interfaces;
+using SOLID.Domain.Enums;
+using SOLID.Domain.Interfaces;
+using SOLID.Presentation.ConsoleApp.Menu;
 
 namespace SOLID.Presentation.ConsoleApp.ViewModels
 {
-    class GamePlayViewModel
+    class GamePlayViewModel : IGameObserver
     {
-        public int Attempts { get; set; }
+        private readonly MenuBuilder _menuBuilder;
 
-        public int? TargetNumber { get; set; }
-
-        public string LastMessage { get; set; }
-
-        public GuessResult GameStatus { get; set; }
-
-        public GamePlayViewModel()
+        public GamePlayViewModel(MenuBuilder menuBuilder)
         {
-            Attempts = 0;
-            TargetNumber = null;
-            LastMessage = string.Empty;
-            GameStatus = GuessResult.GameOver;
+            _menuBuilder = menuBuilder;
+        }
+
+        public void OnGameStateChanged(IGameState state)
+        {
+            if (state.GameStatus == GameStatus.Start && state.GuessResult == null)
+            {
+                Console.WriteLine($"Игра началась! У вас есть {state.Attempts} попыток");
+            }
+
+            if (state.GuessResult == GuessResult.Correct)
+            {
+                _menuBuilder.BuildGameEndMenu($"Вы победили!").Show();
+            } else if (state.Attempts == 0)
+            {
+                _menuBuilder.BuildGameEndMenu($"Вы проиграли. Я загадал число {state.TargetNumber}").Show();
+            }
+
+            if (state.GuessResult != null && state.Attempts != 0)
+            {
+                string str = state.GuessResult == GuessResult.TooHigh ? "больше" : "меньше";
+                Console.WriteLine($"Ваше число {str}. Осталось попыток: {state.Attempts}");
+            }
         }
     }
 }

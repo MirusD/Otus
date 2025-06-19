@@ -1,14 +1,31 @@
 ﻿using SOLID.Application.Interfaces;
-using SOLID.Domain.Enums;
 using SOLID.Domain.Interfaces;
 
 namespace SOLID.Application.Services
 {
     class GuessNumberGameService : IGameService
     {
-        private IGame _game;
+        private IGame? _game;
         private readonly IGameSettings _gameSettings;
         private readonly IGameFactory _gameFactory;
+
+        private readonly List<IGameObserver> _observers = new();
+
+        public void Subscribe(IGameObserver observer)
+        {
+            _observers.Add(observer);
+        }
+
+        public void Unsubscribe(IGameObserver observer)
+        {
+            _observers.Remove(observer);
+        }
+
+        private void Notify(IGameState state)
+        {
+            foreach (var observer in _observers)
+                observer.OnGameStateChanged(state);
+        }
 
         public GuessNumberGameService(IGameFactory gameFactory, IGameSettings gameSettings)
         {
@@ -16,15 +33,19 @@ namespace SOLID.Application.Services
             _gameSettings = gameSettings;
         }
 
-
-        public GuessResult MakeGuess(int guess)
+        public void MakeGuess(int guess)
         {
-            return _game.MakeGuess(guess);
+            if (_game is IGame)
+            {
+                _game.MakeGuess(guess);
+                Notify(_game.GetState());
+            }
         }
 
         public void StartGame()
         {
             _game = _gameFactory.CreateGame(_gameSettings);
+            Notify(_game.GetState());
         }
 
         public void ResetGame()
@@ -35,16 +56,8 @@ namespace SOLID.Application.Services
             }
 
             _game.ResetGame();
+            Notify(_game.GetState());
         }
 
-        public int GetAttempt()
-        {
-            return _game.Attemps;
-        }
-
-        public int GetTargetNumber()
-        {
-            return _game.TargetNumber;
-        }
     }
 }

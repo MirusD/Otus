@@ -1,6 +1,7 @@
 ﻿using SOLID.Infrastructure.Settings.Interfaces;
-using SOLID.Presentation.ConsoleApp.Commands.Factories;
 using SOLID.Presentation.ConsoleApp.Menu.Items;
+using SOLID.Presentation.ConsoleApp.Commands;
+using SOLID.Presentation.ConsoleApp.Commands.Interfaces;
 
 namespace SOLID.Presentation.ConsoleApp.Menu
 {
@@ -22,19 +23,19 @@ namespace SOLID.Presentation.ConsoleApp.Menu
                 new ActionMenuItem
                 (
                     text : "Старт",
-                    onSelect: _commandFactory.CreateStartGameCommand()
+                    onSelect: _commandFactory.Create(CommandType.StartGame)
                 ),
 
                 new SubMenuItem
                 (
-                    text: "Настройки", 
+                    text: "Настройки",
                     buildsubMenu: BuildSettingsMenu
                 ),
 
                 new ActionMenuItem
                 (
                     text: "Выход",
-                    onSelect: _commandFactory.CreateExitGameCommand()
+                    onSelect: _commandFactory.Create(CommandType.ExitGame)
                 )
             });
         }
@@ -47,40 +48,40 @@ namespace SOLID.Presentation.ConsoleApp.Menu
                 (
                     text: "Громкость",
                     getValue: () => _settingsProvider.SoundSettings.SoundVolume.ToString(),
-                    onLeft : _commandFactory.CreateChangeVolumeCommand(-1),
-                    onRight : _commandFactory.CreateChangeVolumeCommand(1)
+                    onLeft : _commandFactory.Create(CommandType.VolumeDown),
+                    onRight : _commandFactory.Create(CommandType.VolumeUp)
                 ),
 
                 new SettingMenuItem
                 (
                     text :"Музыка",
                     getValue: () => _settingsProvider.SoundSettings.SoundMute ? "Выкл" : "Вкл",
-                    onLeft: _commandFactory.CreateToggleSoundMuteCommand(),
-                    onRight: _commandFactory.CreateToggleSoundMuteCommand()
+                    onLeft: _commandFactory.Create(CommandType.ToggleSoundMute),
+                    onRight: _commandFactory.Create(CommandType.ToggleSoundMute)
                 ),
 
                 new SettingMenuItem
                 (
                     text:"Попытки",
                     getValue :() => _settingsProvider.GameSettings.MaxAttemps.ToString(),
-                    onLeft: _commandFactory.CreateChangeAttemptsCommand(-1),
-                    onRight: _commandFactory.CreateChangeAttemptsCommand(1)
+                    onLeft: _commandFactory.Create(CommandType.AttemptsDown),
+                    onRight: _commandFactory.Create(CommandType.AttemptsUp)
                 ),
 
                 new SettingMenuItem
                 (
                     text:"Минимум",
                     getValue :() => _settingsProvider.GameSettings.MinValue.ToString(),
-                    onLeft: _commandFactory.CreateChangeMinValueCommand(-1),
-                    onRight: _commandFactory.CreateChangeMinValueCommand(1)
+                    onLeft: _commandFactory.Create(CommandType.MinValueDown),
+                    onRight: _commandFactory.Create(CommandType.MinValueUp)
                 ),
 
                 new SettingMenuItem
                 (
                     text: "Максимум",
                     getValue :() => _settingsProvider.GameSettings.MaxValue.ToString(),
-                    onLeft: _commandFactory.CreateChangeMaxValueCommand(-1),
-                    onRight: _commandFactory.CreateChangeMaxValueCommand(1)
+                    onLeft: _commandFactory.Create(CommandType.MaxValueDown),
+                    onRight: _commandFactory.Create(CommandType.MaxValueUp)
                 ),
 
                 new SubMenuItem("Назад", BuildMainMenu)
@@ -94,7 +95,7 @@ namespace SOLID.Presentation.ConsoleApp.Menu
                 new ActionMenuItem
                 (
                     text: "Повторить", 
-                    onSelect: _commandFactory.CreateStartGameCommand()
+                    onSelect: _commandFactory.Create(CommandType.StartGame)
                 ),
 
                 new SubMenuItem
@@ -106,7 +107,7 @@ namespace SOLID.Presentation.ConsoleApp.Menu
                 new ActionMenuItem
                 (
                     text : "Выход", 
-                    onSelect: _commandFactory.CreateExitGameCommand()
+                    onSelect: _commandFactory.Create(CommandType.ExitGame)
                 )
             });
         }

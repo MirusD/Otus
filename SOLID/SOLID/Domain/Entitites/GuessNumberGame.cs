@@ -1,5 +1,6 @@
 ﻿using SOLID.Domain.Enums;
 using SOLID.Domain.Interfaces;
+using SOLID.Domain.State;
 
 namespace SOLID.Domain.Entitites
 {
@@ -9,44 +10,61 @@ namespace SOLID.Domain.Entitites
         private readonly IGameSettings _settings;
         private int _targetNumber;
         private int _attempts;
+        private IGameState _state;
 
-        public GuessNumberGame(INumberGenerator numberGenerator, IGameSettings settings)
+        private bool IsGameOver()
         {
-            _numberGenerator = numberGenerator;
-            _settings = settings;
-            ResetGame();
-        }
+            if (_attempts <= 0)
+            {
+                _state.GameStatus = GameStatus.GameOver;
+                return true;
+            }
 
-        public int Attemps => _attempts;
-        public int TargetNumber => _targetNumber;
+            return false;
+        }
 
         public void ResetGame()
         {
             _targetNumber = _numberGenerator.Generate(_settings.MinValue, _settings.MaxValue);
             _attempts = _settings.MaxAttemps;
+            _state.GameStatus = GameStatus.Start;
+            _state.Attempts = _attempts;
+            _state.TargetNumber = _targetNumber;
         }
 
-        public GuessResult MakeGuess(int guess)
+        public GuessResult? MakeGuess(int guess)
         {
             if (IsGameOver())
             {
-                return GuessResult.GameOver;
+                _state.GuessResult = GuessResult.AttemptsOver;
+                return _state.GuessResult;
+            }
+            else
+            {
+                _state.Attempts = --_attempts;
+
+                _state.GuessResult = (guess.CompareTo(_targetNumber)) switch
+                {
+                    0 => GuessResult.Correct,
+                    < 0 => GuessResult.TooLow,
+                    > 0 => GuessResult.TooHigh,
+                };
             }
 
-            _attempts--;
-
-            return guess switch
-            {
-                _ when guess == _targetNumber => GuessResult.Correct,
-                _ when guess < _targetNumber => GuessResult.TooLow,
-                _ when guess > _targetNumber => GuessResult.TooHigh,
-                _ => throw new ArgumentOutOfRangeException(nameof(guess), "Неверный аргумент guess")
-            };
+            return _state.GuessResult;
         }
 
-        public bool IsGameOver()
+        public IGameState GetState()
         {
-            return _attempts <= 0;
+            return _state;
+        }
+
+        public GuessNumberGame(INumberGenerator numberGenerator, IGameSettings settings)
+        {
+            _numberGenerator = numberGenerator;
+            _settings = settings;
+            _state = new GameState();
+            ResetGame();
         }
     }
 }

@@ -1,18 +1,17 @@
-﻿using SOLID.Domain.Enums;
+﻿using SOLID.Application.Interfaces;
+using SOLID.Domain.Enums;
+using SOLID.Domain.Interfaces;
 using SOLID.Infrastructure.Services.SoundPlayer.Interfaces;
 using SOLID.Presentation.ConsoleApp.Enums;
-using SOLID.Presentation.ConsoleApp.Interfaces;
-using SOLID.Presentation.ConsoleApp.ViewModels;
 
-namespace SOLID.Presentation.ConsoleApp
+namespace SOLID.Presentation.ConsoleApp.Sound
 {
-    class ConsoleSound
+    class ConsoleSound : IGameObserver
     {
         private readonly ISoundPlayer<SoundGameTrack> _soundPlayer;
 
-        public ConsoleSound(ISoundPlayer<SoundGameTrack> soundPlayer, IGameController gameController)
+        public ConsoleSound(ISoundPlayer<SoundGameTrack> soundPlayer)
         {
-            gameController.Subscribe(async viewModel => await Task.Run(() => ConsoleSoundGamePlay(viewModel)));
             _soundPlayer = soundPlayer;
 
             var playList = new Dictionary<SoundGameTrack, string>
@@ -26,23 +25,25 @@ namespace SOLID.Presentation.ConsoleApp
             _soundPlayer.SetPlayList(playList);
         }
 
-        public void Start()
+        public void PlayMainMenuSound()
         {
             _soundPlayer.Play(SoundGameTrack.Menu);
         }
 
-        public void ConsoleSoundGamePlay(GamePlayViewModel gamePlayViewModel)
+        public void OnGameStateChanged(IGameState state)
         {
-            if (gamePlayViewModel.GameStatus == GuessResult.Correct)
+            if (state.GameStatus == GameStatus.Start && state.GuessResult == null)
             {
-                _soundPlayer.Play(SoundGameTrack.GameWin);
-                return;
+                _soundPlayer.Play(SoundGameTrack.GamePlay);
             }
 
-            if (gamePlayViewModel.GameStatus == GuessResult.GameOver)
+            if (state.GuessResult == GuessResult.Correct)
+            {
+                _soundPlayer.Play(SoundGameTrack.GameWin);
+            }
+            else if (state.Attempts == 0)
             {
                 _soundPlayer.Play(SoundGameTrack.GameOver);
-                return;
             }
         }
     }

@@ -16,8 +16,9 @@ namespace SOLID.Presentation.ConsoleApp.Menu
         public void Show()
         {
             int index = 0;
+            bool shouldExit = false;
 
-            while (true)
+            while (!shouldExit)
             {
                 Console.Clear();
                 DrawTitle();
@@ -41,6 +42,7 @@ namespace SOLID.Presentation.ConsoleApp.Menu
                         break;
                     case ConsoleKey.Enter:
                         _items[index].OnSelect();
+                        shouldExit = true;
                         break;
                 }
             }

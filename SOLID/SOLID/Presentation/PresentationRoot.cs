@@ -4,16 +4,16 @@ namespace SOLID.Presentation
 {
     class PresentationRoot
     {
-        private readonly ConsoleMain _consoleRoot;
+        private readonly AppConsole _consoleRoot;
 
-        public PresentationRoot(ConsoleMain consoleApp)
+        public PresentationRoot(AppConsole consoleApp)
         {
             _consoleRoot = consoleApp;
         }
 
         public void StartConsoleUI()
         {
-            _consoleRoot.Start();
+            _consoleRoot.Init();
         }
     }
 }
